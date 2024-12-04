@@ -37,6 +37,8 @@ vim.keymap.set("n", "<leader>t", function()
     local win_id = vim.api.nvim_get_current_win()
     vim.api.nvim_win_set_height(win_id, TERM_HEIGHT)
     vim.cmd("terminal")
+    -- Fix the height so it does not get resized (local to window)
+    vim.cmd("set winfixheight")
 end)
 
 -- Replace current word
