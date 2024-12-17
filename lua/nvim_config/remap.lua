@@ -30,15 +30,23 @@ vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
+-- Leave terminal
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
+
 -- Open terminal (always bottom right)
 vim.keymap.set("n", "<leader>t", function()
     local TERM_HEIGHT = 15
-    vim.cmd("botright split")
-    local win_id = vim.api.nvim_get_current_win()
-    vim.api.nvim_win_set_height(win_id, TERM_HEIGHT)
-    vim.cmd("terminal")
+    -- vim.cmd("botright split")
+    -- local win_id = vim.api.nvim_get_current_win()
+    -- vim.api.nvim_win_set_height(win_id, TERM_HEIGHT)
+    vim.cmd.split()
+    vim.cmd.term()
+    -- Move the terminal to the bottom
+    vim.cmd.wincmd("J")
+    -- Set the height of the current window
+    vim.api.nvim_win_set_height(0, TERM_HEIGHT)
     -- Fix the height so it does not get resized (local to window)
-    vim.cmd("set winfixheight")
+    vim.opt.winfixheight = true
 end)
 
 -- Replace current word

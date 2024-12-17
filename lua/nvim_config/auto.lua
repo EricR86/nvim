@@ -6,20 +6,16 @@ local yank_group = augroup('HighlightYank', {})
 
 -- Change terminal settings on open
 -- Allow ESC to exit terminal mode in terminal buffers only
-autocmd({"TermOpen"}, {
+autocmd('TermOpen', {
         group = NvimConfigGroup,
         pattern = "*",
         callback = function()
-            local win_id = vim.api.nvim_get_current_win()
-            local term_window = vim.wo[win_id]
-            term_window.number = false
-            term_window.relativenumber = false
-            term_window.signcolumn = "no"
-            term_window.listchars = ""
+            vim.opt.number = false
+            vim.opt.relativenumber = false
+            vim.opt.signcolumn = "no"
+            vim.opt.listchars = ""
 
-            -- TODO: Replace with lua equivalents
-            vim.cmd("tnoremap <buffer> <Esc> <c-\\><c-n>")
-            vim.cmd("startinsert")
+            vim.cmd.startinsert()
         end,
 })
 
