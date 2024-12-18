@@ -30,6 +30,9 @@ vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
+-- Execute lua code under cursor
+vim.keymap.set("v", "<leader>x", ":lua<CR>")
+
 -- Leave terminal
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 
