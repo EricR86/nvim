@@ -1,7 +1,10 @@
 -- Colorscheme
 return {
-  "ellisonleao/gruvbox.nvim", priority = 1000 , config = function()
-      vim.o.background = "dark"
-      vim.cmd("colorscheme gruvbox")
+  "folke/tokyonight.nvim",
+  lazy = false,
+  priority = 1000,
+  opts = {},
+  config = function()
+    vim.cmd[[colorscheme tokyonight-night]]
   end
 }
