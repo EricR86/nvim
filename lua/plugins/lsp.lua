@@ -6,6 +6,7 @@ return {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
         "j-hui/fidget.nvim",
+        "ibhagwan/fzf-lua",
         -- Quick setup for vim lua development
         {
             "folke/lazydev.nvim",
@@ -38,10 +39,10 @@ return {
             }
         })
 
-        -- Setup telescope to list workspace/document symbols
-        local builtin = require("telescope.builtin")
-        vim.keymap.set("n", "<leader>pS", builtin.lsp_dynamic_workspace_symbols, {})
-        vim.keymap.set("n", "<leader>ds", builtin.lsp_document_symbols, {})
+        -- Setup fzf-lua for workspace symbols
+        local fzf_lua = require("fzf-lua")
+        vim.keymap.set("n", "<leader>ds", fzf_lua.lsp_document_symbols, {})
+        vim.keymap.set("n", "<leader>pS", fzf_lua.lsp_live_workspace_symbols, {})
 
         -- Setup appearence of diagnostic popups
         vim.diagnostic.config({
@@ -50,7 +51,7 @@ return {
                 focusable = false,
                 style = "minimal",
                 border = "rounded",
-                source = "always",
+                source = true,  -- Always show who is reporting issues
                 header = "",
                 prefix = "",
             },
