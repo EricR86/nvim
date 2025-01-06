@@ -32,24 +32,58 @@ vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 -- Execute lua code under cursor
 vim.keymap.set("v", "<leader>x", ":lua<CR>", { desc = "Execute lua under cursor" })
+-- Execute lua file
+vim.keymap.set("n", "<leader>x", ":%lua<CR>", { desc = "Execute lua file" })
 
 -- Leave terminal
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 
--- Open terminal (always bottom right)
+-- Open/Toggle terminal (always bottom right)
+---@class TermState
+---@field buffer_id integer
+---@field window_id integer
+local toggle_term_state = {
+  buffer_id = -1,
+  window_id = -1,
+}
+
+local TERM_HEIGHT = 15
+
 vim.keymap.set("n", "<leader>t", function()
-    local TERM_HEIGHT = 15
-    -- vim.cmd("botright split")
-    -- local win_id = vim.api.nvim_get_current_win()
-    -- vim.api.nvim_win_set_height(win_id, TERM_HEIGHT)
-    vim.cmd.split()
-    vim.cmd.term()
-    -- Move the terminal to the bottom
-    vim.cmd.wincmd("J")
-    -- Set the height of the current window
-    vim.api.nvim_win_set_height(0, TERM_HEIGHT)
-    -- Fix the height so it does not get resized (local to window)
-    vim.opt.winfixheight = true
+    -- Toggle the terminal window
+
+    -- If the window has never been created
+    -- Or if the window is closed/invalid/hidden
+    if not vim.api.nvim_win_is_valid(toggle_term_state.window_id) then
+      -- Create a window
+      vim.cmd.split()
+      -- Move the terminal to the bottom
+      vim.cmd.wincmd("J")
+      -- Set the height of the current window
+      vim.api.nvim_win_set_height(0, TERM_HEIGHT)
+      vim.api.nvim_win_get_buf(0)
+      -- Fix the height so it does not get resized (local to window)
+      vim.opt.winfixheight = true
+
+      toggle_term_state.window_id = vim.api.nvim_get_current_win()
+
+      -- Manage terminal buffer state on open terminal window
+
+      -- If we have an existing valid terminal buffer
+      if vim.api.nvim_buf_is_valid(toggle_term_state.buffer_id) then
+        -- Use the existing terminal buffer
+        vim.api.nvim_set_current_buf(toggle_term_state.buffer_id)
+      else
+        -- Otherwise create a new one
+        vim.cmd.terminal()
+        -- Save the buffer id
+        toggle_term_state.buffer_id = vim.api.nvim_win_get_buf(0)
+      end
+    -- Otherwise just close/hide our terminal window
+    else
+      vim.api.nvim_win_hide(toggle_term_state.window_id)
+    end
+
 end,
 { desc = "Open terminal bottom right" })
 
